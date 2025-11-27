@@ -1,0 +1,67 @@
+<dashboard>
+  <label>Tenable ASM - Activity Log</label>
+  <description>Audit logs of actions performed by users, automation, and system rules in Tenable Attack Surface Management.</description>
+
+  <row>
+    <panel>
+      <title>Activity Timeline</title>
+      <chart>
+        <search>
+          <query>
+            index=tenable_asm sourcetype=asm_activitylog
+            | timechart count by action
+          </query>
+        </search>
+        <option name="charting.chart">line</option>
+      </chart>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Top Actors</title>
+      <chart>
+        <search>
+          <query>
+            index=tenable_asm sourcetype=asm_activitylog
+            | stats count by actor
+            | sort -count
+            | head 10
+          </query>
+        </search>
+        <option name="charting.chart">bar</option>
+      </chart>
+    </panel>
+
+    <panel>
+      <title>Top Actions</title>
+      <chart>
+        <search>
+          <query>
+            index=tenable_asm sourcetype=asm_activitylog
+            | stats count by action
+            | sort -count
+            | head 10
+          </query>
+        </search>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Recent Activity Logs</title>
+      <table>
+        <search>
+          <query>
+            index=tenable_asm sourcetype=asm_activitylog
+            | table _time actor action target description
+            | sort -_time
+            | head 20
+          </query>
+        </search>
+      </table>
+    </panel>
+  </row>
+</dashboard>
